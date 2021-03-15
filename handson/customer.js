@@ -1,18 +1,47 @@
 const { apiRoot, projectKey } = require("./client.js");
 
-module.exports.getCustomerById = (ID) =>{}
+module.exports.getCustomerById = (ID) => {};
 
-module.exports.getCustomerByKey = (key) =>{}
+module.exports.getCustomerByKey = (key) => apiRoot.withProjectKey({projectKey}).customers().withKey({key}).get().execute()
 
-const createCustomerDraft = (customerData) => {}
+const createCustomerDraft = (customerData) => {
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    key,
+    countryCode,
+  } = customerData;
+  return {
+    firstName,
+    lastName,
+    email,
+    password,
+    key,
+    addresses: [
+      {
+        country: countryCode,
+      },
+    ],
+    defaultShippingAddress: 0,
+  };
+};
 
-module.exports.createCustomer = (customerData) =>{}
+module.exports.createCustomer = (customerData) =>
+  apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .post({
+      body: createCustomerDraft(customerData),
+    })
+    .execute();
 
 const createCustomerDraftKey = (customerData) => {};
 
-module.exports.createCustomerKeyVerfiedEmail = (customerData) =>{}
+module.exports.createCustomerKeyVerfiedEmail = (customerData) => {};
 
 module.exports.assignCustomerToCustomerGroup = (
   customerKey,
   customerGroupKey
-) => {}
+) => {};
