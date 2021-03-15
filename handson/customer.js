@@ -39,7 +39,12 @@ module.exports.createCustomer = (customerData) =>
 
 const createCustomerDraftKey = (customerData) => {};
 
-module.exports.createCustomerKeyVerfiedEmail = (customerData) => {};
+module.exports.createCustomerKeyVerfiedEmail = (customerData) => apiRoot.withProjectKey({projectKey}).customers().post({
+  body: {
+    ...createCustomerDraft(customerData),
+    isEmailVerified: true,
+  }
+}).execute();
 
 module.exports.assignCustomerToCustomerGroup = (
   customerKey,
