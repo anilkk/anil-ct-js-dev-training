@@ -1,6 +1,6 @@
 const { apiRoot, projectKey } = require("./client.js");
 
-module.exports.getCustomerById = (ID) => {};
+module.exports.getCustomerById = (ID) => apiRoot.withProjectKey({projectKey}).customers().withId({ID}).get().execute()
 
 module.exports.getCustomerByKey = (key) => apiRoot.withProjectKey({projectKey}).customers().withKey({key}).get().execute()
 

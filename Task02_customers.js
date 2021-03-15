@@ -18,9 +18,9 @@ const customerSampleData = {
 
 // createCustomer(customerSampleData).then(log).catch(log);
 
-getCustomerByKey(customerSampleData.key).then(log).catch(log);
+// getCustomerByKey(customerSampleData.key).then(log).catch(log);
 
-//getCustomerById("10cb16bf-a5d8-4f47-b664-fe5cae2f75d0").then(log).catch(log);
+getCustomerById("91f8fb2e-1667-44f2-afc0-7e1c693bce3b").then(log).catch(log);
 
 //createCustomerKeyVerfiedEmail(customerSampleData).then(log).catch(log);
 
