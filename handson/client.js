@@ -20,7 +20,24 @@ const projectKey = "anil-js-training-project";
 //use .env for credentials process.env.adminClientId 
 
 const getClient = () => {
-  
+  const authMiddleware = createAuthMiddlewareForClientCredentialsFlow({
+    host: 'https://auth.europe-west1.gcp.commercetools.com',
+    projectKey,
+    credentials: {
+      clientId: process.env.adminClientId,
+      clientSecret: process.env.adminClientSecret,
+    },
+    scopes: ['manage_project:anil-js-training-project'],
+    fetch,
+  })
+  const httpMiddleware = createHttpMiddleware({
+    host: 'https://api.europe-west1.gcp.commercetools.com',
+    fetch,
+  })
+  const client = createClient({
+    middlewares: [authMiddleware, httpMiddleware],
+  })
+  return client
 };
 
 const getImportClient = () => {
@@ -75,7 +92,7 @@ const getMyAPIClient = () => {
   return client;
 };
 
-// module.exports.apiRoot = createApiBuilderFromCtpClient(getClient());
+module.exports.apiRoot = createApiBuilderFromCtpClient(getClient());
 
 // module.exports.importApiRoot = createApiBuilderFromCtpClientOnlyForImports(
 //   getImportClient()
