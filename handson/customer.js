@@ -49,4 +49,37 @@ module.exports.createCustomerKeyVerfiedEmail = (customerData) => apiRoot.withPro
 module.exports.assignCustomerToCustomerGroup = (
   customerKey,
   customerGroupKey
-) => {};
+) => {
+  return this.getCustomerByKey(customerKey).then(customer => {
+    const updateActions = [{
+        action: "setCustomerGroup",
+        customerGroup: {
+          key: customerGroupKey
+        }
+      }];
+    
+    return apiRoot.withProjectKey({projectKey}).customers().withId({ID: customer.body.id}).post({
+      body: {
+        actions: updateActions,
+        version: customer.body.version
+      }
+    }).execute();
+  })
+};
+
+
+module.exports.setFirstNameOfTheCustomerByKey = (firstName, customerKey) => {
+  return this.getCustomerByKey(customerKey).then(customer => {
+    const updateActions = [{
+      action: "setFirstName",
+      firstName
+    }];
+    
+    return apiRoot.withProjectKey({projectKey}).customers().withId({ID: customer.body.id}).post({
+      body: {
+        actions: updateActions,
+        version: customer.body.version
+      }
+    }).execute();
+  });
+};
