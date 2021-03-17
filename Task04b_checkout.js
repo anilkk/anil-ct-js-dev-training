@@ -3,19 +3,19 @@ const { log } = require("./logger.js");
 
 const cartDraftData = {
   currency: "EUR",
-  customerId: "91f8fb2e-1667-44f2-afc0-7e1c693bce3b",
+  customerId: "8be2537e-96c8-4b31-b602-52681f05aab4",
   countryCode: "DE",
 };
 
 const paymentDraft = {
-  key:"testPayment-2",
+  key:"ak-21g-testPayment",
   amountPlanned:{
     currencyCode:'EUR',
-    centAmount:270000
+    centAmount: 2*270000
   },
   customer:{
     typeId:'customer',
-    id:'91f8fb2e-1667-44f2-afc0-7e1c693bce3b'
+    id:'8be2537e-96c8-4b31-b602-52681f05aab4'
   }
 }
 
@@ -33,7 +33,7 @@ const paymentDraft = {
 // checkout.getOrderById('37b49f01-b417-49c5-adc9-2df5ffdcf3f5').then(log).catch(log)
 // checkout.createPayment(paymentDraft).then(log).catch(log)
 // checkout.getPaymentById('d56dd0d9-e220-48b9-83f3-315b83358aaf').then(log).catch(log)
-checkout.addPaymentToOrder('d56dd0d9-e220-48b9-83f3-315b83358aaf','37b49f01-b417-49c5-adc9-2df5ffdcf3f5').then(log).catch(log)
+// checkout.addPaymentToOrder('d56dd0d9-e220-48b9-83f3-315b83358aaf','37b49f01-b417-49c5-adc9-2df5ffdcf3f5').then(log).catch(log)
 
 // checkout
 //   .updateOrderCustomState(
@@ -43,27 +43,34 @@ checkout.addPaymentToOrder('d56dd0d9-e220-48b9-83f3-315b83358aaf','37b49f01-b417
 //   .then(log)
 //   .catch(log);
 
-// const checkoutProcess = async () => {
-//   let emptyCart = await checkout.createCart(cartDraftData);
+const checkoutProcess = async () => {
+  let emptyCart = await checkout.createCart(cartDraftData);
 
-//   let filledCart = await checkout.addLineItemsToCart(
-//     ["123", "123",'123'],
-//     emptyCart.body.id
-//   );
-//   filledCart = await checkout.addDiscountCodeToCart(
-//     "SUMMER",
-//     emptyCart.body.id
-//   );
-//   const payment = await checkout.createPayment(paymentDraft);
-//   let order = await checkout.createOrderFromCart(filledCart.body.id);
-//   order = await checkout.addPaymentToOrder(payment.body.id,order.body.id);
-//   order = await checkout.setOrderState('Confirmed',order.body.id);
-//   if (order) {
-//     return {
-//       status: 201,
-//       message: "order created",
-//     };
-//   }
-// };
+  let filledCart = await checkout.addLineItemsToCart(
+    ["macbook-15-128", "macbook-15-128",'macbook-15-128'],
+    emptyCart.body.id
+  );
+  
+  filledCart = await checkout.addDiscountCodeToCart(
+    "SALES",
+    emptyCart.body.id
+  );
+  
+  const payment = await checkout.createPayment(paymentDraft);
 
-// checkoutProcess().then(log).catch(log);
+  let order = await checkout.createOrderFromCart(filledCart.body.id);
+  order = await checkout.addPaymentToOrder(payment.body.id, order.body.id);
+  order = await checkout.setOrderState('Confirmed',order.body.id);
+  // if (order) {
+  //   return {
+  //     status: 201,
+  //     message: "order created",
+  //   };
+  // }
+  return {
+    status: 201,
+    message: "order created",
+  };
+};
+
+checkoutProcess().then(log).catch(log);

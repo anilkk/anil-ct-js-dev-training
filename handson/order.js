@@ -44,7 +44,21 @@ module.exports.addLineItemsToCart = (arrayOfSKUs, cartId) => {
     }).execute();
   })
 }
-module.exports.addDiscountCodeToCart = (discountCode, cartId) => {};
+module.exports.addDiscountCodeToCart = (discountCode, cartId) => {
+  return this.getCartById(cartId).then(cart => {
+    const updateActions = [{
+      action: 'addDiscountCode',
+      code: discountCode
+    }];
+
+    return apiRoot.withProjectKey({projectKey}).carts().withId({ID: cart.body.id}).post({
+      body: {
+        actions: updateActions,
+        version: cart.body.version
+      }
+    }).execute();
+  })
+};
 
 module.exports.createOrderFromCart = (cartId) => {
   return createOrderFromCartDraft(cartId).then(cartDraftData => {
